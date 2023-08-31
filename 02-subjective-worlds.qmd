@@ -1,0 +1,323 @@
+# The Subjective Worlds of Frequentist and Bayesian Statistics {#sec-subjective-worlds}
+
+## File setup {.unnumbered}
+
+```{r}
+#| label: setup
+
+library(tidyverse)
+library(patchwork)
+```
+
+```{r}
+#| label: set-glossary
+
+library(glossary)
+glossary_path("glossary.yml")
+glossary_popup("hover")
+```
+
+```{r}
+#| label: glossary-style
+#| results: asis
+
+glossary_style(color = "#0066cc", 
+               text_decoration = "underline double 1px",
+               def_bg = "#333",
+               def_color = "white")
+```
+
+## Mission Statement
+
+Mission is to understand the purpose of statistical inference.
+
+## Chapter Goals
+
+Bayesian statistics allows us to go from what is known -- the *data*
+(e.g., the results of the coin throw) -- and extrapolate backwards to
+make probabilistic statements about the parameters (the underlying bias
+of the coin) of the processes that were responsible for its generation.
+In Bayesian statistics, this inversion process is carried out by
+application of `r glossary("Bayes’ Theorem", "Bayes’ rule")`
+
+## Bayes' Rule -- Allowing us to go From the Effect Back to its Cause
+
+::: {#exm-example-crooked-casino}
+#### Crooked Casino
+
+Suppose that we know that a casino is crooked and uses a loaded die with
+a probability of rolling a 1, that is
+$\frac{1}{3} = 2 \times \frac{1}{6}$, twice its unbiased value.
+
+$$
+Pr(1,1 | \text{crooked casino}) = \frac{1}{3} \times \frac{1}{3} = \frac{1}{9}
+$$ {#eq-crooked-casino}
+
+-   **Pr**: Here we use `Pr` to denote a probability, with the comma
+    here having the literal interpretation of *and.* Hence, `Pr(1, 1)`
+    is the probability we obtain a 1 on the first roll *and* a 1 on the
+    second.
+-   **\|**: The vertical line, `|`, here means *given* in probability,
+    so `Pr(1,1|crooked casino)` is the probability of throwing two
+    consecutive 1s *given that* the casino is crooked.
+:::
+
+With Bayes' rule you can go from
+
+$$
+Pr(effect|case) → Pr(cause|effect)
+$$ {#eq-opposite-direction} In order to take this leap, you need
+
+***
+::: {#thm-bayes-rule}
+#### Bayes' theorem
+
+$$
+Pr(effect|cause) = \frac{Pr(cause|effect) \times Pr(cause)}{Pr(effect)}
+$$ {#eq-bayes-theorem}
+:::
+***
+
+Continuing our @exm-example-crooked-casino:
+$Pr(\text{crooked casino}|1,1)$ is the probability that the casino is
+crooked given that we rolled two 1s. **This process where we go from an
+effect back to a cause is the essence of inference.**
+
+## The Purpose of Statistical Inference
+
+There are two predominant schools of thought for carrying out this
+process of inference: Frequentist and Bayesian.
+
+## The World According to Frequentists
+
+In Frequentist (or Classical) statistics, we suppose that our sample of
+data is the result of one of an infinite number of exactly repeated
+experiments. The sample of coin flips we obtain for a fixed and finite
+number of throws is generated as if it were part of a longer (that is,
+infinite) series of repeated coin flips. In Frequentist statistics the
+data are assumed to be *random* and results from *sampling* from a fixed
+and defined *population* distribution. For a Frequentist the noise that
+obscures the true signal of the real population process is attributable
+to *sampling variation* -- the fact that each sample we pick is slightly
+different and not exactly representative of the population.
+
+## The World According to Bayesians
+
+Bayesians do not imagine repetitions of an experiment in order to define
+and specify a probability. Bayesians do not view probabilities as
+underlying laws of cause and effect. They are merely abstractions which
+we use to help express our uncertainty. In this frame of reference, it
+is unnecessary for events to be repeatable in order to define a
+probability. For Bayesians, probabilities are seen as an expression of
+subjective beliefs, meaning that they can be updated in light of new
+data. Bayesians assume that, since we are witness to the data, it is
+fixed, and therefore does not vary. We do not need to imagine that there
+are an infinite number of possible samples, or that our data are the
+undetermined outcome of some random process of sampling. We never
+perfectly know the value of an unknown parameter.
+
+## Do Parameters Actually Exist and have a Point Value?
+
+For Bayesians, the parameters of the system are taken to vary, whereas
+the known part of the system -- the data -- is taken as given.
+Frequentist statisticians, on the other hand, view the unseen part of
+the system -- the parameters of the probability model -- as being fixed
+and the known parts of the system -- the data -- as varying.
+
+In the Bayesian approach, parameters can be viewed from two
+perspectives. Either we view the parameters as truly *varying*, or we
+view our knowledge about the parameters as imperfect. The fact that we
+obtain different estimates of parameters from different studies can be
+taken to reflect either of these two views.
+
+The Frequentist view of parameters as a limiting value of an average
+across an infinity of identically repeated experiments runs into
+difficulty when we think about one-off events. For example, the
+probability that the Democrat candidate wins in the 2020 US election
+cannot be justified in this way, since elections are never rerun under
+the exact same conditions.
+
+## Frequentist and Bayesian Inference
+
+The Bayesian inference process is the only logical and consistent way to
+modify our beliefs to account for new data. Before we collect data we
+have a probabilistic description of our beliefs, which we call a
+*prior.* We then collect data, and together with a model describing our
+theory, Bayes' formula allows us to calculate our post-data or
+*posterior* belief:
+
+$$
+prior + data → (model) → posterior
+$$ {#eq-from-prior-to-posterior}
+
+In inference, we want to draw conclusions based purely on the rules of
+probability. If we wish to summarise our evidence for a particular
+hypothesis, we describe this using the language of probability, as the
+'probability of the hypothesis given the data obtained'. The difficulty
+is that when we choose a probability model to describe a situation, it
+enables us to calculate the 'probability of obtaining our data given our
+hypothesis being true' -- the opposite of what we want. This probability
+is calculated by accounting for all the possible samples that could have
+been obtained from the population, if the hypothesis were true. The
+issue of statistical inference, common to both Frequentists and
+Bayesians, is how to invert this probability to get the desired result.
+
+Frequentists stop here, using this inverse probability as evidence for a
+given hypothesis. They assume a hypothesis is true and on this basis
+calculate the probability of obtaining the observed data sample. If this
+probability is small, then it is assumed that it is unlikely that the
+hypothesis is true, and we reject it. In our coin example, if we throw
+the coin 10 times and it always lands heads up (our data), the
+probability of this data occurring given that the coin is fair (our
+hypothesis) is small. In this case, Frequentists would reject the
+hypothesis that the coin is fair. Essentially, this amounts to setting
+$Pr(hypothesis|data)=0$. However, if this probability is not below some
+arbitrary threshold, then we do not reject the hypothesis. But
+Frequentist inference is then unclear about what probability we should
+ascribe to the hypothesis. Surely it is non-zero, but exactly how
+confident are we in it? In Frequentist inference we do not get an
+accumulation of evidence for a particular hypothesis, unlike in Bayesian
+statistics.
+
+In Bayesian inference, there is no need for an arbitrary threshold in
+the probability in order to validate the hypothesis. All information is
+summarised in this (posterior) probability and there is no need for
+explicit hypothesis testing. However, to use Bayes' rule for inference,
+we must supply a prior -- an additional element compared to Frequentist
+statistics. The prior is a probability distribution that describes our
+beliefs in a hypothesis before we collect and analyse the data. In
+Bayesian inference, we then update this belief to produce something
+known as a posterior, which represents our post-analysis belief in the
+hypothesis.
+
+### The Frequentist and Bayesian Murder Trials
+
+If you choose the Frequentist trial, your jurors start by specifying a
+model based on previous trials, which assigns a probability of your
+being seen by the security camera if you were guilty. They use this to
+make the statement that 'If you did commit the murder, then 30% of the
+time you would have been seen by the security camera' based on a
+hypothetical infinity of repetitions of the same conditions. Since
+$Pr(\text{you were seen by the camera}|guilt)$ is not sufficiently
+unlikely (the p value is not below 5%), the jurors cannot reject the
+null hypothesis of guilt, and you are sentenced to life in prison.
+
+In the Bayesian trial there is collected different kinds of evidence
+against that you are guilty: In addition to the 30% of camera footage
+there is an array of evidence, which suggests - that you neither knew
+Sally - nor had any previous record of violent conduct, being otherwise
+a perfectly respectable citizen. - Furthermore, Sally's ex-boyfriend is
+a multiple offending-violent convict on the run from prison after being
+sentenced by a judge on the basis of Sally's own witness testimony.
+
+Using this information, the jury sets a prior probability of the
+hypothesis that you are guilty equal to $\frac{1}{1000}$. Using
+`r glossary("Bayes’ Theorem", "Bayes’ rule")` the jury concludes that
+the probability of your committing the crime is only $\frac{1}{1000}$.
+
+------------------------------------------------------------------------
+
+::: {#exm-murder-trial}
+#### Bayesian Murder Trial
+
+$$
+\begin{align*}
+p(guilt | \text{security camera footage}) = \frac{p(\text{security camera footage})\times p(gilt)}{p(\text{security camera footage})}\\
+= \frac{\frac{30}{100} \times \frac{1}{1000}}{\frac{30}{100} \times \frac{999}{1000} + \frac{30}{100} \times \frac{1}{1000}} \\
+= \frac{1}{1000}
+\end{align*}
+$$ {#eq-murder-trial}
+:::
+
+------------------------------------------------------------------------
+
+::: callout-note
+#### Note: How to calculate the denominator?
+
+I do understand the formula but have difficulty with calculation of the
+denominator: My personal explication is a kind of normalization using
+the the guilt and not guilt probabilities.
+:::
+
+### Radio control towers
+
+The essence in my understanding of this example is that in the Bayesian
+approach there is a probability distribution and not just a point
+estimate as in the Frequentist point of view.
+
+## Bayesian Inference Via Bayes' Rule
+
+The Bayesian inference process uses
+`r glossary("Bayes’ Theorem", "Bayes’ rule")` to estimate a probability
+distribution for those unknown parameters after we observe the data.
+
+The term "probability distribution" will be explained in @sec-probability.
+
+***
+::: {#thm-bayes-inference}
+#### Bayes’ rule used in statistical inference
+
+$$
+Pr(𝛩|data) = \frac{Pr(data|𝛩) \times Pr(𝛩)}{Pr(data)}
+$$ {#eq-bayes-inference}
+
+-   $p$ indicates a probability distribution which may represent either
+    probabilities or, more usually, probability densities.
+-   $𝛩$ represents the unknown parameter(s) which we want to estimate.
+
+:::
+***
+
+### Likelihood
+
+`Pr(data|θ)` as the firt term in the numerator of @eq-bayes-inference is called the *likelihood*, which is common to both Frequentist and Bayesian analyses. It tells us the probability of generating the particular sample of data if the parameters in our statistical model were equal to $θ$. When we choose a statistical model, we can usually calculate the probability of particular outcomes, so this is easily obtained.
+
+More about the understanding of "likelihoods" in @sec-likelihoods.
+
+### Priors
+
+`p(θ)` as the second term in the numerator of @eq-bayes-inference is the most controversial part of the Bayesian formula, is called the prior distribution. It is a probability distribution which represents our pre-data beliefs across different values of the parameters in our model, $θ$.
+
+The concept of priors is covered in detail in @sec-priors.
+
+
+### The Denominator
+
+`p(data)` in the denominator of @eq-bayes-inference represents the probability of obtaining our particular sample of data if we assume a particular model and prior. 
+
+A detailed discussion is postponed until @sec-devil-denominator.
+
+### Posteriors: the goal of Bayesian inference
+
+`p(θ|data)` is the posterior probability distribution and the main goal of Bayesian inference. The posterior distribution summarises our uncertainty over the value of a parameter. If the distribution is narrower, then this indicates that we have greater confidence in our estimates of the parameter’s value. The posterior distribution is also used to predict future outcomes of an experiment and for model testing.
+
+More details in @sec-posteriors.
+
+## Implicit Versus Explicit Subjectivity
+
+One of the major arguments levied against Bayesian statistics is that it is subjective due to its dependence on the analyst specifying their pre-experimental beliefs through priors. 
+
+1. *All* analyses involve a degree of subjectivity, which is either explicitly stated or, more often, implicitly assumed.
+2. In a Frequentist analysis, the statistician typically selects a model of probability which depends on a range of assumptions. For example, the simple *linear regression model* is often used, without justification, in applied Frequentist analyses.
+3. In applied Frequentist's research, there is a tendency among scientists to choose data to include in an analysis to suit one’s needs, although this practice should really be discouraged.
+4. A further source of subjectivity is the way in which models are checked and tested.
+
+In contrast to the examples of subjectivity mentioned above, Bayesian priors are explicitly stated. Furthermore, the more data that is collected, (in general) the less impact the prior exerts on posterior distributions. In any case, if a slight modification of priors results in a different conclusion being reached, it must be reported by the researcher.
+
+The choice of a threshold probability of 5% or 1% – known as a statistical test’s size – is completely arbitrary, and subjective. In Bayesian statistics, we instead use a subjective prior to invert the likelihood from $p(data|θ) → p(θ |data)$. There is no need to accept or reject a null hypothesis and consider an alternative since all the information is neatly summarised in the posterior. In this way we see a symmetry in the choice of Frequentist test size and Bayesian priors; they are both required to invert the likelihood to obtain a posterior.
+
+## Chapter Summary
+
+This chapter has focused on the philosophy of statistical inference. Statistical inference is the process of inversion required to go from an effect (the data) back to a cause (the process or parameters). The trouble with this inversion is that it is generally much easier to do things the other way round: to go from a cause to an effect. Frequentists and Bayesians start by defining a forward probability model that can generate data (the effect) from a given set of parameters (the cause). The method that they each use to run this model in reverse and determine the probability for a cause is different. Frequentists and Bayesians also differ in their view on probabilities.
+
+## Chapter Outcomes
+
+The reader should now be familiar with the following concepts:
+
+- the goals of statistical inference
+- the difference in interpretation of probabilities for Frequentists versus Bayesians
+- the differences in the Frequentist and Bayesian approaches to inference
+
+## Appendix (empty)
+
+## Problem Sets

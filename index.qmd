@@ -1,9 +1,10 @@
 # Preface {.unnumbered}
 
-This is a Quarto book. And my first try to work with Quarto.
+This Quarto book collects my personal notes, trials and exercises of the
+[A Student's Guide to Bayesian
+Statistics](https://uk.sagepub.com/en-gb/eur/book/student%E2%80%99s-guide-bayesian-statistics)
+by Ben Lambert.
 
-To learn more about Quarto books visit <https://quarto.org/docs/books>.
-
-```{r}
-1 + 1
-```
+::: {.callout-note style="color: blue;"}
+#### This is work in progress: Finished about 5%.
+:::

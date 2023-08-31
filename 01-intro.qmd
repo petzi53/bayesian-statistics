@@ -1,9 +1,4 @@
-# Introduction
+# How Best to use this Book
 
-This is a book created from markdown and executable code.
-
-See @knuth84 for additional discussion of literate programming.
-
-```{r}
-1 + 1
-```
+At the moment intentionally left empty. Later I will add how to use my
+Quarto notes.
