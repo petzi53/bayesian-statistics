@@ -12,6 +12,7 @@ book:
     - index.qmd
     - 01-intro.qmd
     - 02-subjective-worlds.qmd
+    - 03-probability.qmd
     - 95-references.qmd
 
 bibliography: references.bib
@@ -20,7 +21,8 @@ format:
   html:
     theme: cosmo
     number-sections: true
-    toc-depth: 3
+    toc: true
+    toc-depth: 4
     toc-expand: 2
     code-fold: false
     code-tools: true
@@ -34,7 +36,6 @@ knitr:
     R.options:
       knitr.graphics.auto_pdf: true
 
-editor: visual
 
 execute:
     freeze: auto
@@ -42,10 +43,11 @@ execute:
 language:
    crossref-fig-title: "Picture"
    crossref-prp-title: "Callout"
+   crossref-lem-title: "Video"
 
 # https://github.com/quarto-dev/quarto-cli/blob/main/src/resources/language/_language.yml
    callout-note-title: "Note"            # blue
-   callout-tip-title: "Resource"         # green
+   callout-tip-title: "Tip"         # green
    callout-warning-title: "Wach out!"    # orange
-   callout-important-title: "Procedure"  # red
+   callout-important-title: "Important"  # red
    callout-caution-title: "TODO"         # yellow

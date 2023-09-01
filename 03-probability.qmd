@@ -1,0 +1,212 @@
+# Probability {#sec-probability}
+
+## File setup {.unnumbered}
+
+```{r}
+#| label: setup
+
+```
+
+```{r}
+#| label: set-glossary
+
+library(glossary)
+glossary_path("glossary.yml")
+glossary_popup("hover")
+```
+
+```{r}
+#| label: glossary-style
+#| results: asis
+
+glossary_style(color = "#0066cc", 
+               text_decoration = "underline double 1px",
+               def_bg = "#333",
+               def_color = "white")
+```
+
+## Mission Statement
+
+In Bayesian statistics, we formulate models in terms of entities called
+probability distributions. This chapter provides an introduction to all
+things related to probability.
+
+## Chapter Goals
+
+The chapter focuses on probability distribution: - We define what is
+meant by probability distribution. - We discuss why the distinction
+between likelihoods and probabilities is important. - We explain how to
+manipulate probability distributions in order to derive quantities of
+interest. - We show how to derive the Bayesian formula from the law of
+conditional probability.
+
+## Probability Distributions: Helping us to Explicitly State our Ignorance
+
+::: {#lem-random-variables}
+##### Random variables and probability distributions
+
+{{< video https://youtu.be/pvkhK03aFDM?si=sbI9_WI0ICjgEQuq >}}
+:::
+
+The mathematical theory of probability provides a logic and language
+which is the only completely consistent framework to describe situations
+involving uncertainty. In probability theory, we describe the behaviour
+of random variables. This is a statistical term for variables that
+associate different numeric values with each of the possible outcomes of
+some random process. By random here we do not mean the colloquial use of
+this term to mean something that is entirely unpredictable. A random
+process is simply a process whose outcome cannot be perfectly known
+ahead of time (it may nonetheless be quite predictable).
+
+### What makes a probability distribution valid?
+
+::: {#lem-prob-dist}
+##### What is a probability distribution?
+
+{{< video https://youtu.be/4Ghtj_iTSpI?si=5J13qlUPoE9QZIgZ >}}
+:::
+
+1.  All values of the distribution must be real and non-negative.
+2.  The sum (for discrete random variables) or integral (for continuous
+    random variables) across all possible values of the random variable
+    must be 1.
+
+This definition is of central importance to Bayesian statistics. Only
+valid probability distributions can be used to describe uncertainty. The
+pursuit of this ideal underlies the majority of all methods in applied
+Bayesian statistics -- analytic and computational -- and hence its
+importance cannot be overstated!
+
+::: {#lem-discrete-prob-dist}
+##### An introduction to discrete probability distributions
+
+{{< video https://youtu.be/4Ghtj_iTSpI?si=DYV0uTsKrz3w9jVZ >}}
+:::
+
+::: {#lem-continous-prob-dist}
+##### An introduction to continuous probability distributions
+
+{{< video https://youtu.be/s87mffcX0xU?si=_As5GZMSPCZEft76 >}}
+:::
+
+### Probabilities versus probability densities: interpreting discrete and continuous probability distributions
+
+We can't assign probabilities to every possible value of continuous
+distributions as we can do with discrete distributions. The reason is
+that there would be infinite values (e.g., \$2500, \$2500.10, \$2500.01,
+\$2500.001). If we would sum up all these values we would not get 1 but
+infinity.
+
+If we reconsider the test values {\$2500, \$2500.10, \$2500.01,
+\$2500.001}, we reason that these are all equally unlikely and belong to
+a set of an infinite number of potential values that we could draw. This
+means that, for a continuous random variable, we always have
+`Pr(θ = number) = 0`, to avoid an infinite sum. Hence, when we consider
+`p(θ)` for a continuous random variable, it turns out we should
+interpret its values as
+`r glossary("probability density", "probability densities")`, not
+`r glossary("probabilities")`.
+
+There are events that are impossible. These events have zero
+probability. However, the converse is not true: some events that are of
+zero probability are still possible.
+
+While it is important to understand that `r glossary("probabilities")`
+and `r glossary("probability density", "probability densities")` are not
+the same types of entity, the good news for us is that
+`r glossary("Bayes’ Theorem", "Bayes’ rule")` is the same for each.
+
+
+::: {#thm-bayes-rule-dist-cont}
+
+##### Bayes’ rule for discrete and continuous distributions
+$$
+\begin{align*}
+Pr(𝛩=1\|X=1) = \frac{Pr(X=1|𝛩=0)Pr(𝛩=1)}{Pr(X=1)} \\
+p(𝛩=1\|X=1) = \frac{p(X=1|𝛩=0)p(𝛩=1)}{p(X=1)}
+\end{align*}
+$$ {#eq-bayes-rule-dist-cont}
+
+:::
+
+### The mean of distributions
+
+A popular way of summarising a distribution is by its *mean*, which is a measure of central tendency for a distribution. More intuitively, a mean, or *expected value*, of a distribution is the long-run average value that would be obtained if we sampled from it an infinite number of times.
+
+### Generalising probability distributions to two dimensions (2D)
+
+Life is often more complex than the (1D) examples encountered thus far. We often must reason about the outcomes of a number of processes, whose results may be interdependent. We begin by considering the outcome of two measurements to introduce the mechanics of two-dimensional probability distributions. Fortunately, these rules do not become more complex when generalising to higher dimensional problems.
+
+#### Matt’s horses: a 2D discrete probability example
+
+Imagine that you are a horse racing aficionado and want to quantify the uncertainty in the outcome of two separate races. In each race there are two horses from a particular stable, called A and B. From their historical performance over 100 races, you notice that both horses often react the same way to the racing conditions. When horse A wins, it is more likely that, later in the day, B will also win, and vice versa, with similar interrelations for the losses; when A finds conditions tough, so does B.
+
+|            | A-lose (0) | A-Win (1)  |
+| :--------- | :--------: | :--------: |
+| B-LOSE (0) |    0.3     |        0.1 |
+| B-WIN (1)  |    0.1     |        0.5 |
+: A probability distribution indicating the historical performance of two horses, A and B, that race in separate events {#tbl-horse-race}
+
+This distribution satisfy the requirements for a valid probability distribution because:
+1. All the values of the distribution are real and non-negative
+2. The sum of all cells of the two discrete random variables results in 1, e.g. the distribution is normalized.
+
+The table displays the outcome of two random variables. Since the probability distribution is a function of two variables, we say that it is two-dimensional (2D).
+
+Interpret the table we can say that it is very unlikely that one horse win and the other lose (10% each). The highest probability is that both horses win (50%). An intermediate probability of 30% is assigned to the case that both horses lose.
+
+
+::: {#lem-2d-discrete-dist}
+##### 2D discrete distributions: an introduction
+{{< video https://youtu.be/trWTk31jYQU?si=JmwlKuJAidVYEL8m >}}
+:::
+
+#### Foot length and literacy: a 2D continuous probability example
+
+Suppose that we measure the foot size and literacy test scores for a group of individuals. Both of these variables can be assumed to be continuous, meaning that we represent our strength of beliefs by specifying a two-dimensional probability distribution across a continuum of values. Since this distribution is two-dimensional we need three dimensions to plot it – two dimensions for the variables and one dimension for the probability density. These three-dimensional plots are, however, a bit cumbersome to deal with, and so we prefer to use contour plots to graph two-dimensional continuous probability distributions. In `r glossary("Contour Plot", "contour plots")`, we mark the set of positions where the value of the probability density function is constant, as contour lines. The rate of change of the gradient of the function at a particular position in parameter space is, hence, determined by the local density of contour lines.
+
+::: {#lem-2d-cont-dist}
+##### 2D continuous distributions: an introduction
+
+{{< video https://youtu.be/0BxDoyiZd44?si=Q1KlEFDmvp2xUJZy >}}
+:::
+
+### Marginal distributions
+
+Although in the horse racing example there are two separate races, each with an uncertain outcome, we can still consider the outcome of one race on its own. Suppose, for example, that we witness only the result for A. What would be the probability distribution that describes this outcome?
+
+To calculate this, we must average out the dependence of the other variable. Since we are interested only in the result of A, we can sum down the column values for B to give us the marginal distribution of A. Hence, we see that the marginal probability of A winning is 0.6. 
+
+
+|            | A-lose (0) | A-Win (1)  |$Pr(X_{B})$ |
+| :--------- | :--------: | :--------: | :--------: |
+| B-LOSE (0) |    0.3     |        0.1 |        0.4 |
+| B-WIN (1)  |    0.1     |        0.5 |        0.6 |
+| $Pr(X_{A})$|    0.4     |        0.6 |            |
+: The marginal distributions of A and B (shown below and to the right of the joint density values, respectively), achieved by summing the values in each column or row, respectively. {#tbl-horse-race-2}
+
+So to calculate the probability of a single event we just sum the probabilities of all the potential ways this can happen. This amounts to summing over all potential states of the other variable. 
+
+::: {#lem-disc-marg-dist}
+##### Discrete marginal probability distributions
+
+{{< video https://youtu.be/M3MlaoW0TT4?si=CvxVNwYQBQzXYnuR >}}
+
+:::
+
+::: {.callout-tip}
+Marginal distributions gets their name because for discrete random variables, they are obtained by summing a row or column of a table and placing the result in its margins.
+:::
+
+In the foot size and literacy test example, suppose we want to summarise the distribution for literacy score, irrespective of foot size. We can obtain this distribution by ‘integrating out’ the dependence on foot size.
+
+Another way to think about marginal densities is to imagine walking across the landscape of the joint density, where regions of greater density represent hills. To calculate the marginal density for a literacy score of 100 we walk along the horizontal line that corresponds to this score and record the number of calories we burn in walking. If the path is relatively flat, we burn fewer calories and the corresponding marginal density is low. However, if the path includes a large hill, we burn a lot of energy and the marginal density is high.
+
+
+
+::: {#lem-cont-marg-dist}
+
+##### Continuous marginal probability distributions
+{{< video https://youtu.be/F97Qf5FGt5M?si=Eam2mN6IKxgLla4k >}}
+
+:::

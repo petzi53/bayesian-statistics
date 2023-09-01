@@ -5,8 +5,6 @@
 ```{r}
 #| label: setup
 
-library(tidyverse)
-library(patchwork)
 ```
 
 ```{r}
@@ -321,3 +319,7 @@ The reader should now be familiar with the following concepts:
 ## Appendix (empty)
 
 ## Problem Sets
+
+### Problem 2.1: The deterministic nature of random coin throwing
+
+## I STOPPED HERE (2023-09-01)

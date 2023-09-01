@@ -6,5 +6,5 @@ Statistics](https://uk.sagepub.com/en-gb/eur/book/student%E2%80%99s-guide-bayesi
 by Ben Lambert.
 
 ::: {.callout-note style="color: blue;"}
-#### This is work in progress: Finished about 5%.
+#### This is work in progress: Finished about 9%.
 :::
