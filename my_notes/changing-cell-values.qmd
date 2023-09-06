@@ -1,0 +1,114 @@
+---
+title: "Change cell value in a data frame"
+format: html
+---
+
+::: {.callout-note}
+Working with the [shoe size dataset](https://github.com/emtechinstitute/MachineLearning/blob/main/shoesize.csv) I had to change some cell values in the "Height" column, specifically the Index==178 and Index==208 (row 179 & 209). Because these two values are of type doubles, whereas all the other values are integers.
+
+I noticed that there are several methods that I will report here.
+:::
+
+```{r}
+url <- "https://raw.githubusercontent.com/emtechinstitute/MachineLearning/main/shoesize.csv"
+tib <- readr::read_csv(url, col_types = "icdd")
+
+str(tib)
+tib[c(1:2, 178, 208, 407:408) , ]
+```
+
+
+
+## Using base R
+
+### Change cell values individually
+
+```{r}
+tib1 <-  tib
+tib1$Height[178] = 70
+tib1$Height[208] = 67
+tib1[c(1:2, 178, 208, 407:408) , ]
+```
+
+The cell values has changed but the column "Height" is still of type "double".
+
+```{r}
+tib1$Height <- as.integer(tib1$Height)
+tib1[c(1:2, 178, 208, 407:408) , ]
+```
+
+
+### Changing the type of the column
+
+But I could have use the conversion from double to integer by brute force without changing the cell values. But this works only with base R `as.integer()`. Tidyverse equivalent does not change the type of the column but raise a warning.
+
+```{r}
+tib2 <- tib
+# before the conversion
+tib2[c(1:2, 178, 208, 407:408) , ]
+tib2$Height <-  as.integer(tib$Height)
+# after the conversion
+tib2[c(1:2, 178, 208, 407:408) , ]
+```
+
+## Using tidyverse
+
+### Change cell values individually
+
+```{r}
+tib3 <- tib |>  
+      dplyr::mutate(Height = ifelse(Index == 178, 70 , Height)) |> 
+      dplyr::mutate(Height = ifelse(Index == 208, 67 , Height)) 
+tib3 |>  dplyr::filter(Index == 1:2 | Index == 178 | Index == 208 | Index == 407:408)
+```
+As in the R Base example we need an extra step to change the type of the "Height" column to integer. But we shouldn't use `rlang::as_integer()` as it is deprecated and displays a warning 
+
+```{r}
+
+## transform "Height" from double to integer 
+
+## with deprecated rlang::as_integer() function
+tib3 |> 
+      dplyr::mutate(Height = rlang::as_integer(Height)) |> 
+      dplyr::glimpse()
+
+
+## with the new vctrs::vec_cast() function
+tib3 |> 
+      dplyr::mutate(Height = vctrs::vec_cast(Height, integer())) |> 
+      dplyr::glimpse()
+
+```
+
+### Changing the type of column
+
+
+
+You can't change the type of a double column to integer with tidyverse functions `rlang::as_integer(Height)` or `vctrs::vec_cast(Height, integer())` if there are still double values in the "Height" column. At first you have to clean the values, as I have done it with the `round()` function.
+
+
+```{r}
+## this here is the correct version without error
+tib4 <-  tib |> 
+    dplyr::mutate(Height = round(Height, 0)) |> 
+    dplyr::mutate(Height = vctrs::vec_cast(Height, integer()))
+
+
+
+
+```
+
+The following code chunk show the error message when you try to change the column type with tidyverse functions without cleaning up the data. Note that this change works with the R base functions that work brute force.
+
+```{r}
+#| error: true
+
+
+## the following line produces an error massage
+tib |> 
+    dplyr::mutate(Height = vctrs::vec_cast(Height, integer()))
+    
+## type of column has not changed
+dplyr::glimpse(tib)
+```
+

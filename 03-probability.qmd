@@ -5,25 +5,11 @@
 ```{r}
 #| label: setup
 
+library(tidyverse)
+library(gt)
+
 ```
 
-```{r}
-#| label: set-glossary
-
-library(glossary)
-glossary_path("glossary.yml")
-glossary_popup("hover")
-```
-
-```{r}
-#| label: glossary-style
-#| results: asis
-
-glossary_style(color = "#0066cc", 
-               text_decoration = "underline double 1px",
-               def_bg = "#333",
-               def_color = "white")
-```
 
 ## Mission Statement
 
@@ -133,6 +119,15 @@ $$ {#eq-bayes-rule-dist-cont}
 
 A popular way of summarising a distribution is by its *mean*, which is a measure of central tendency for a distribution. More intuitively, a mean, or *expected value*, of a distribution is the long-run average value that would be obtained if we sampled from it an infinite number of times.
 
+
+
+::: {.callout-caution}
+##### TODO: Playing a computational lottery
+
+**Reproduce Figure 3.4:** As the number of games played increases, the sample mean approaches the true mean of $50\frac{1}{2}$.  This quantity corresponds to the mean winning number that would be drawn from a lottery where the possible numbers are the integers from 1 to 100, each of which is equally likely.
+
+:::
+
 ### Generalising probability distributions to two dimensions (2D)
 
 Life is often more complex than the (1D) examples encountered thus far. We often must reason about the outcomes of a number of processes, whose results may be interdependent. We begin by considering the outcome of two measurements to introduce the mechanics of two-dimensional probability distributions. Fortunately, these rules do not become more complex when generalising to higher dimensional problems.
@@ -141,13 +136,31 @@ Life is often more complex than the (1D) examples encountered thus far. We often
 
 Imagine that you are a horse racing aficionado and want to quantify the uncertainty in the outcome of two separate races. In each race there are two horses from a particular stable, called A and B. From their historical performance over 100 races, you notice that both horses often react the same way to the racing conditions. When horse A wins, it is more likely that, later in the day, B will also win, and vice versa, with similar interrelations for the losses; when A finds conditions tough, so does B.
 
-|            | A-lose (0) | A-Win (1)  |
-| :--------- | :--------: | :--------: |
-| B-LOSE (0) |    0.3     |        0.1 |
-| B-WIN (1)  |    0.1     |        0.5 |
-: A probability distribution indicating the historical performance of two horses, A and B, that race in separate events {#tbl-horse-race}
+```{r}
+#| label: tbl-horse-race
+#| tbl-cap: "A probability distribution indicating the historical performance of two horses, A and B, that race in separate events"
+#| attr-source: '#lst-tbl-horse-race lst-cap="Reproduce Table 3.1"'
+
+d <- new_tibble(list(rowname = c("Lose (0)", "Win (1)"),
+    `Lose (0)` = c(0.3, 0.1), 
+    `Win (1)` = c(0.1, 0.5))) 
+
+d |> 
+    gt() |> 
+    tab_stubhead(label = "Horse B") |> 
+    tab_spanner(
+        label = "Horse A",
+        columns = c("Lose (0)", "Win (1)")
+    ) |> 
+    cols_label(
+        "Lose (0)" = html("Lose<br>(0)"),
+        "Win (1)" = html("Win<br>(1)")
+    )
+```
+
 
 This distribution satisfy the requirements for a valid probability distribution because:
+
 1. All the values of the distribution are real and non-negative
 2. The sum of all cells of the two discrete random variables results in 1, e.g. the distribution is normalized.
 
@@ -165,6 +178,8 @@ Interpret the table we can say that it is very unlikely that one horse win and t
 
 Suppose that we measure the foot size and literacy test scores for a group of individuals. Both of these variables can be assumed to be continuous, meaning that we represent our strength of beliefs by specifying a two-dimensional probability distribution across a continuum of values. Since this distribution is two-dimensional we need three dimensions to plot it – two dimensions for the variables and one dimension for the probability density. These three-dimensional plots are, however, a bit cumbersome to deal with, and so we prefer to use contour plots to graph two-dimensional continuous probability distributions. In `r glossary("Contour Plot", "contour plots")`, we mark the set of positions where the value of the probability density function is constant, as contour lines. The rate of change of the gradient of the function at a particular position in parameter space is, hence, determined by the local density of contour lines.
 
+Plug-in unit: @sec-annex-example-1
+
 ::: {#lem-2d-cont-dist}
 ##### 2D continuous distributions: an introduction
 
@@ -177,13 +192,30 @@ Although in the horse racing example there are two separate races, each with an 
 
 To calculate this, we must average out the dependence of the other variable. Since we are interested only in the result of A, we can sum down the column values for B to give us the marginal distribution of A. Hence, we see that the marginal probability of A winning is 0.6. 
 
+```{r}
+#| label: tbl-horse-race-2
+#| tbl-cap: "The marginal distributions of A and B (shown below and to the right of the joint density values, respectively), achieved by summing the values in each column or row, respectively."
+#| attr-source: '#lst-tbl-horse-race-2 lst-cap="Reproduce Table 3.2"'
 
-|            | A-lose (0) | A-Win (1)  |$Pr(X_{B})$ |
-| :--------- | :--------: | :--------: | :--------: |
-| B-LOSE (0) |    0.3     |        0.1 |        0.4 |
-| B-WIN (1)  |    0.1     |        0.5 |        0.6 |
-| $Pr(X_{A})$|    0.4     |        0.6 |            |
-: The marginal distributions of A and B (shown below and to the right of the joint density values, respectively), achieved by summing the values in each column or row, respectively. {#tbl-horse-race-2}
+d2 <- tibble(janitor::adorn_totals(d, c("row", "col")))
+d2$rowname[[3]] <-  "Pr(A_X )"
+
+d2 |> 
+    gt() |> 
+    tab_stubhead(label = "Horse B") |> 
+    tab_spanner(
+        label = "Horse A",
+        columns = c("Lose (0)", "Win (1)")
+    ) |> 
+    cols_label(
+        "Lose (0)" = html("Lose<br>(0)"),
+        "Win (1)" = html("Win<br>(1)"),
+        Total ~ "{{Pr(X_B )}}"
+    ) |> 
+    fmt_units(columns = rowname)
+
+
+```
 
 So to calculate the probability of a single event we just sum the probabilities of all the potential ways this can happen. This amounts to summing over all potential states of the other variable. 
 
@@ -210,3 +242,26 @@ Another way to think about marginal densities is to imagine walking across the l
 {{< video https://youtu.be/F97Qf5FGt5M?si=Eam2mN6IKxgLla4k >}}
 
 :::
+
+#### Marginal distribution by sampling
+
+An alternative approach to estimating the marginal distribution of literacy test score is by sampling from the joint distribution of literacy score and foot size. To estimate these marginal distributions we ignore the observations of the variable not directly of interest and draw a histogram of the remaining samples. While not exact, the shape of this histogram is a good approximation of the marginal distribution if we have enough samples.
+
+#### Venn diagrams
+
+An alternative way to think about marginal distributions is using Venn diagrams.
+
+### Conditional distributions
+
+We sometimes receive only partial information about a system which is of interest to us. In probability, when we observe one variable and want to update our uncertainty for another variable, we are seeking a conditional distribution. This is because we compute the probability distribution of one uncertain variable, conditional on the known value of the other(s).
+
+In each case, we have reduced some of the uncertainty in the system by observing one of its characteristics. Hence, in the two-dimensional examples described above, the conditional distribution is one-dimensional because we are only now uncertain about one variable.
+
+::: {#thm-cond-dist}
+##### Probability of one variable, conditional on the value of the other
+
+$$
+p(A|B) = \frac{p(A,B)}{p(B)}
+$$
+:::
+

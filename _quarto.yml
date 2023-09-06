@@ -7,19 +7,28 @@ book:
   date: last-modified
   date-format: YYYY-MM-DD HH:mm
   favicon: "img/apple-touch-icon.png"
+  search: true
+  repo-url: https://github.com/petzi53/bayesian-statistics/
+  repo-actions: [edit]
+  sharing: [twitter, facebook]
 
   chapters:
     - index.qmd
     - 01-intro.qmd
-    - 02-subjective-worlds.qmd
-    - 03-probability.qmd
-    - 95-references.qmd
+    - part: part-one.qmd
+      chapters:
+        - 02-subjective-worlds.qmd
+        - 03-probability.qmd
+        - 80-references.qmd
+  appendices:
+    - 90-example-1.qmd
 
 bibliography: references.bib
 
 format:
   html:
     theme: cosmo
+    css: glossary.css
     number-sections: true
     toc: true
     toc-depth: 4
@@ -40,14 +49,20 @@ knitr:
 execute:
     freeze: auto
 
-language:
-   crossref-fig-title: "Picture"
-   crossref-prp-title: "Callout"
-   crossref-lem-title: "Video"
 
 # https://github.com/quarto-dev/quarto-cli/blob/main/src/resources/language/_language.yml
+language:
+   crossref-fig-title: "Image"
+   crossref-tbl-title: "Tabulation"
+   crossref-prp-title: "Callout"
+   crossref-lem-title: "Video"
+   section-title-appendices: "APPENDICES"
+
    callout-note-title: "Note"            # blue
    callout-tip-title: "Tip"         # green
    callout-warning-title: "Wach out!"    # orange
    callout-important-title: "Important"  # red
    callout-caution-title: "TODO"         # yellow
+
+comments:
+  hypothesis: true

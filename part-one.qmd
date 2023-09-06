@@ -1,0 +1,9 @@
+# PART 1: BAYESIAN INFERENCE
+
+The purpose of this part is twofold: 
+
+1. First to introduce the reader to the principles of inference.
+2. Second to provide reader with knowledge of probability distributions, which is essential to Bayesian inference.
+
+- **Chapter 2** introduces the reader to the aims of statistical inference.
+- **Chapter 3** teaches a working knowledge of probability distributions and how to manipulate them.

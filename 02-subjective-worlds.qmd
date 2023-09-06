@@ -7,24 +7,6 @@
 
 ```
 
-```{r}
-#| label: set-glossary
-
-library(glossary)
-glossary_path("glossary.yml")
-glossary_popup("hover")
-```
-
-```{r}
-#| label: glossary-style
-#| results: asis
-
-glossary_style(color = "#0066cc", 
-               text_decoration = "underline double 1px",
-               def_bg = "#333",
-               def_color = "white")
-```
-
 ## Mission Statement
 
 Mission is to understand the purpose of statistical inference.

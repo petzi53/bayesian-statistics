@@ -1,0 +1,35 @@
+---
+title: "TOC Abbreviation"
+format: html
+include-after-body: abbrv_toc.html
+number-sections: true
+toc: true
+---
+
+::: {.callout-note}
+This file refers to [StackOverlow question](https://stackoverflow.com/questions/76762121/show-abbreviated-section-name-in-toc-with-quarto): How to abbreviate the TOC entries for long headers?
+
+The necessary javascript is in the file `abbrv_toc.html`. 
+
+**Caveats**: 
+
+1. You need to apply the addition `{toc-text="Short TOC entry"}` after every header, even if the whole text of the header should go into the TOC entry.
+2. I do not know how to add other directives like marks for cross-references or that the header should be unnumbered.
+
+I have added questions about the mentioned problems as comments to the StackOverflow question. But maybe I should get in contact with [shafee](https://stackoverflow.com/users/10858321/shafee) directly?
+
+:::
+
+## Mission Statement {toc-text="Mission Statement"}
+
+In Bayesian statistics, we formulate models in terms of entities called
+probability distributions.
+
+## Chapter Goals {toc-text="Chapter Goals"}
+
+The chapter focuses on probability distribution: 
+
+
+## Probability Distributions: Helping us to Explicitly State our Ignorance {toc-text="Probability Distribution"}
+
+In probability theory, we describe the behaviour of random variables.
