@@ -1,4 +1,7 @@
 # How Best to use this Book
 
+This book collects personal notes during reading of A Student's Guide to
+Bayesian Statistics by Ben Lambert [@lambert2018].
+
 At the moment intentionally left empty. Later I will add how to use my
 Quarto notes.
